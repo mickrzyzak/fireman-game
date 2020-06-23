@@ -1,0 +1,32 @@
+.Column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: $block-size;
+  height: $block-size;
+  font-size: 10px;
+  position: relative;
+  box-sizing: border-box;
+  color: $grey;
+  &:hover {
+    opacity: 0.8;
+    cursor: pointer;
+  }
+  &.Empty {
+    background-color: $grass;
+    color: white;
+  }
+  &.Brick {
+    background-color: $brick;
+    color: white;
+  }
+  &.Wood {
+    background-color: $wood;
+    color: white;
+  }
+  &.Asphalt {
+    background-color: $asphalt;
+    color: white;
+  }
+}

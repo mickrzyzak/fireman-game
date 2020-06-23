@@ -1,0 +1,44 @@
+.WaterStream {
+  width: $water-stream-size;
+  margin-left: ($block-size - $water-stream-size) / 2;
+  pointer-events: none;
+  position: absolute;
+  transform-origin: center top;
+  opacity: 0;
+  z-index: 4;
+  .Wrapper {
+    position: relative;
+    height: calc(100% - 15px);
+    margin-top: 15px;
+    border-top-left-radius: 80%;
+    border-top-right-radius: 80%;
+    border-bottom-left-radius: $water-stream-size;
+    border-bottom-right-radius: $water-stream-size;
+    overflow: hidden;
+    .Particles {
+      $particleHeight: 80px;
+      position: absolute;
+      width: 100%;
+      height: $particleHeight * 10;
+      background-image: url('../images/waterStream.svg');
+      background-repeat: repeat-y;
+      background-size: contain;
+      background-position: center top;
+      animation-name: waterStreamParticleAnimation;
+      animation-duration: 4s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+      @keyframes waterStreamParticleAnimation {
+        0% {
+          top: -$particleHeight * 5;
+        }
+        100% {
+          top: 0%;
+        }
+      }
+    }
+  }
+  &.Visible {
+    opacity: .8;
+  }
+}

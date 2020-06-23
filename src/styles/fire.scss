@@ -1,0 +1,175 @@
+.Fire {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  .Wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    .Particle {
+      pointer-events: none;
+      position: absolute;
+      border-radius: 50%;
+      box-sizing: border-box;
+      animation-name: fireParticle;
+      animation-duration: 1.6s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+      filter: blur(1px);
+      opacity: 0;
+      transition: opacity 1.6s;
+      @keyframes fireParticle {
+        0% {
+          bottom: 10px;
+          width: 0px;
+          height: 0px;
+          background-color: $fire-alt;
+          box-shadow: 0px 0px 10px rgba(black, .3);
+          z-index: 8;
+        }
+        50% {
+          bottom: 10px;
+          width: 20px;
+          height: 20px;
+        }
+        100% {
+          bottom: 35px;
+          width: 1px;
+          height: 1px;
+          background-color: $fire;
+          box-shadow: 0px 0px 10px rgba(black, .3);
+          z-index: 1;
+        }
+      }
+      &:nth-child(1) {
+        animation-delay: 0s;
+      }
+      &:nth-child(2) {
+        animation-delay: .4s;
+        margin-left: -4px;
+      }
+      &:nth-child(3) {
+        animation-delay: .8s;
+      }
+      &:nth-child(4) {
+        animation-delay: 1.2s;
+        margin-left: 4px;
+      }
+      &:nth-child(5) {
+        display: none;
+      }
+      &:nth-child(6) {
+        display: none;
+      }
+      &:nth-child(7) {
+        display: none;
+      }
+      &:nth-child(8) {
+        display: none;
+      }
+    }
+  }
+  &.Ignite {
+    .Wrapper {
+      .Particle {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.Smoke {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  .Wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    .Particle {
+      pointer-events: none;
+      position: absolute;
+      border-radius: 50%;
+      box-sizing: border-box;
+      animation-name: smokeParticle;
+      animation-duration: 3.2s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+      filter: blur(1px);
+      transition: opacity 1.6s;
+      @keyframes smokeParticle {
+        0% {
+          bottom: 5px;
+          width: 1px;
+          height: 1px;
+          z-index: 1;
+        }
+        25% {
+          background-color: $smoke-alt;
+          box-shadow: 0px 0px 10px rgba(black, .3);
+        }
+        50% {
+          bottom: 15px;
+          background-color: $smoke-alt;
+        }
+        75% {
+          background-color: $smoke;
+          box-shadow: 0px 0px 10px rgba(black, .3);
+        }
+        100% {
+          bottom: 35px;
+          width: 20px;
+          height: 20px;
+          z-index: 16;
+        }
+      }
+      &:nth-child(1) {
+        animation-delay: 0s;
+      }
+      &:nth-child(2) {
+        animation-delay: .4s;
+        margin-left: -4px;
+      }
+      &:nth-child(3) {
+        animation-delay: .8s;
+      }
+      &:nth-child(4) {
+        animation-delay: 1.2s;
+        margin-left: 4px;
+      }
+      &:nth-child(5) {
+        animation-delay: 1.6s;
+      }
+      &:nth-child(6) {
+        animation-delay: 2s;
+        margin-left: -4px;
+      }
+      &:nth-child(7) {
+        animation-delay: 2.4s;
+      }
+      &:nth-child(8) {
+        animation-delay: 2.8s;
+        margin-left: 4px;
+      }
+    }
+  }
+  &.Burnt {
+    .Wrapper {
+      .Particle {
+        opacity: 0;
+      }
+    }
+  }
+}

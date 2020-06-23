@@ -1,0 +1,327 @@
+.Fireman {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: $block-size;
+  height: $block-size;
+  transition: top .5s, left .5s;
+  transition-timing-function: linear;
+  z-index: 2;
+  .Wrapper {
+    width: 100%;
+    height: 100%;
+    transform: scaleZ(-1);
+    svg {
+      width: 100%;
+      height: 100%;
+      & > g, & > path {
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        animation-duration: 1s;
+      }
+    }
+    &:after {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 10px;
+      top: -15px;
+      width: 0px;
+      height: 0px;
+      pointer-events: none;
+      border-top: 15px solid transparent;
+      border-bottom: 15px solid transparent;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      transition: .5s;
+      animation-name: selectArrow;
+      animation-duration: .5s;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease;
+      z-index: 999;
+      @keyframes selectArrow {
+        0% {
+          top: -15px;
+        }
+        50% {
+          top: -20px;
+        }
+        100% {
+          top: -15px;
+        }
+      }
+    }
+  }
+  &.Selected {
+    z-index: 3;
+    .Wrapper {
+      &:after {
+        border-top-color: red !important;
+      }
+    }
+  }
+  &.Left {
+    .Wrapper {
+      //
+    }
+  }
+  &.Right {
+    .Wrapper {
+      transform: scaleX(-1);
+    }
+  }
+  &.Top {
+    .Wrapper {
+      //
+    }
+  }
+  &.Bottom {
+    .Wrapper {
+      //
+    }
+  }
+  &.Idle {
+    &.Left, &.Right {
+      .Wrapper {
+        svg {
+          #HEAD {
+            animation-name: firemanIdleHead;
+            @keyframes firemanIdleHead {
+              0% {
+                transform: translateY(0px);
+              }
+              50% {
+                transform: translateY(1px);
+              }
+              100% {
+                transform: translateY(0px);
+              }
+            }
+          }
+          #BELLY {
+            animation-name: firemanIdleBelly;
+            @keyframes firemanIdleBelly {
+              0% {
+                transform: translateY(0px);
+              }
+              50% {
+                transform: translateY(1px);
+              }
+              100% {
+                transform: translateY(0px);
+              }
+            }
+          }
+        }
+      }
+    }
+    &.Bottom, &.Top {
+      .Wrapper {
+        svg {
+          #HEAD {
+            animation-name: firemanIdleHead;
+          }
+          #BELLY {
+            animation-name: firemanIdleBelly;
+          }
+        }
+      }
+    }
+  }
+  &.Move {
+    &.Left, &.Right {
+      .Wrapper {
+        svg {
+          & > g, & > path {
+            transition: 1s;
+          }
+          #HEAD {
+            animation-name: firemanMoveHead;
+            @keyframes firemanMoveHead {
+              0% {
+                transform: translateY(0px);
+              }
+              50% {
+                transform: translateY(1px);
+              }
+              100% {
+                transform: translateY(0px);
+              }
+            }
+          }
+          #LEFT_x5F_HAND {
+            animation-name: firemanMoveLeftHand;
+            @keyframes firemanMoveLeftHand {
+              0% {
+                transform: translateX(0px);
+              }
+              50% {
+                transform: translateX(-4px);
+              }
+              100% {
+                transform: translateX(0px);
+              }
+            }
+          }
+          #RIGHT_x5F_HAND {
+            animation-name: firemanMoveRightHand;
+            @keyframes firemanMoveRightHand {
+              0% {
+                transform: translateX(0px);
+              }
+              50% {
+                transform: translateX(3px);
+              }
+              100% {
+                transform: translateX(0px);
+              }
+            }
+          }
+          #BELLY {
+            animation-name: firemanMoveBelly;
+            @keyframes firemanMoveBelly {
+              0% {
+                transform: translateY(0px);
+              }
+              50% {
+                transform: translateY(1px);
+              }
+              100% {
+                transform: translateY(0px);
+              }
+            }
+          }
+          #LEFT_x5F_LEG {
+            animation-name: firemanMoveLeftLeg;
+            @keyframes firemanMoveLeftLeg {
+              0% {
+                transform: translateX(0px);
+              }
+              50% {
+                transform: translateX(-5px);
+              }
+              100% {
+                transform: translateX(0px);
+              }
+            }
+          }
+          #RIGHT_x5F_LEG {
+            animation-name: firemanMoveRightLeg;
+            @keyframes firemanMoveRightLeg {
+              0% {
+                transform: translateX(0px);
+              }
+              50% {
+                transform: translateX(6px);
+              }
+              100% {
+                transform: translateX(0px);
+              }
+            }
+          }
+        }
+      }
+    }
+    &.Bottom, &.Top {
+      .Wrapper {
+        svg {
+          #HEAD {
+            animation-name: firemanMoveHead;
+          }
+          #BELLY {
+            animation-name: firemanMoveBelly;
+          }
+          #LEFT_x5F_HAND {
+            animation-name: firemanVerticalMoveLeftHand;
+            @keyframes firemanVerticalMoveLeftHand {
+              0% {
+                transform: translateY(0px);
+              }
+              25% {
+                transform: translateY(1px);
+              }
+              50% {
+                transform: translateY(0px);
+              }
+              75% {
+                transform: translateY(-1px);
+              }
+              100% {
+                transform: translateY(0px);
+              }
+            }
+          }
+          #RIGHT_x5F_HAND {
+            animation-name: firemanVerticalMoveRightHand;
+            @keyframes firemanVerticalMoveRightHand {
+              0% {
+                transform: translateY(0px);
+              }
+              25% {
+                transform: translateY(-1px);
+              }
+              50% {
+                transform: translateY(0px);
+              }
+              75% {
+                transform: translateY(1px);
+              }
+              100% {
+                transform: translateY(0px);
+              }
+            }
+          }
+          #LEFT_x5F_LEG {
+            animation-name: firemanVerticalMoveLeftLeg;
+            @keyframes firemanVerticalMoveLeftLeg {
+              0% {
+                transform: translateY(0px);
+              }
+              25% {
+                transform: translateY(1px);
+              }
+              50% {
+                transform: translateY(0px);
+              }
+              75% {
+                transform: translateY(-1px);
+              }
+              100% {
+                transform: translateY(0px);
+              }
+            }
+          }
+          #RIGHT_x5F_LEG {
+            animation-name: firemanVerticalMoveRightLeg;
+            @keyframes firemanVerticalMoveRightLeg {
+              0% {
+                transform: translateY(0px);
+              }
+              25% {
+                transform: translateY(-1px);
+              }
+              50% {
+                transform: translateY(0px);
+              }
+              75% {
+                transform: translateY(1px);
+              }
+              100% {
+                transform: translateY(0px);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &:hover {
+    cursor: pointer;
+    z-index: 3;
+    .Wrapper {
+      &:after {
+        border-top-color: white;
+      }
+    }
+  }
+}

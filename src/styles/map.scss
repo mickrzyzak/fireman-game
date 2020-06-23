@@ -1,0 +1,9 @@
+.Map {
+  border: 10px solid $grey;
+  position: relative;
+  margin: 50px;
+  .Row {
+    display: flex;
+    flex-direction: row;
+  }
+}
