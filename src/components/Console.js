@@ -4,13 +4,14 @@ import { gridToggle, clientSelected } from './../actions';
 import './../styles/console.scss';
 
 class Console extends React.Component {
+
   action = (string) => {
     switch(string) {
       case '/grid':
         this.props.gridToggle();
         break;
       case '/savemap':
-        let mapJSON = JSON.stringify(this.props.store.map.data);
+        let mapJSON = JSON.stringify([this.props.store.map.data, this.props.store.map.visual]);
         prompt('Map code', mapJSON);
         break;
       case '/select':
@@ -25,22 +26,39 @@ class Console extends React.Component {
       case '/select asphalt':
         this.props.clientSelected('ASPHALT');
         break;
+      case '/select water':
+        this.props.clientSelected('WATER');
+        break;
       case '/select torch':
         this.props.clientSelected('TORCH');
         break;
       case '/select add-fireman':
         this.props.clientSelected('ADD_FIREMAN');
         break;
+      case '/select hydrant':
+        this.props.clientSelected('HYDRANT');
+        break;
+      case '/select bush':
+        this.props.clientSelected('BUSH');
+        break;
+      case '/select flower':
+        this.props.clientSelected('FLOWER');
+        break;
+      case '/select erase':
+        this.props.clientSelected('ERASE');
+        break;
       default:
         return 0;
     }
   }
+
   keyPress = (event) => {
     if(event.key === 'Enter') {
       this.action(event.target.value);
       event.target.value = '';
     }
   }
+
   render() {
     let console;
     let version;
@@ -59,19 +77,20 @@ class Console extends React.Component {
       { version }
     </>;
   }
+
 }
 
-const mapStateToProps = store => {
+const consoleStateToProps = store => {
   return {
     store: store,
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const consoleDispatchToProps = dispatch => {
   return {
     gridToggle: () => dispatch(gridToggle()),
     clientSelected: (selected) => dispatch(clientSelected(selected)),
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Console);
+export default connect(consoleStateToProps, consoleDispatchToProps)(Console);

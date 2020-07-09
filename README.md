@@ -14,27 +14,27 @@ Rozgrywka będzie składała się z zestawu fabularyzowanych misji, których cel
 
 * Zapisywanie i odczytywanie stanu mapy
 
-* Generowanie kodu HTML mapy
-
 * Algorytm wyszukiwania ścieżki
 
 * Podążanie postaci po wyznaczonej ścieżce
 
 * Symulacja rozprzestrzeniania się ognia
 
+* Źródła pozyskiwania wody
+
+* Węże przyłączeniowe
+
 * Gaszenie pożarów
 
 ## Elementy wizualne
 
-* Strażak
-
-  * Grafika postaci w 4 kierunkach
-
-  * Animacja postoju i chodu
+* Strażak z animacjami
 
 * Cząsteczkowe animacje dymu i ognia
 
 * Animacja strumienia wody
+
+* Elementy otoczenia: hydrant, krzak, kwiaty
 
 ## W planach 😄
 
@@ -44,26 +44,22 @@ Rozgrywka będzie składała się z zestawu fabularyzowanych misji, których cel
 
 * Dialogi w chmurkach
 
-* Źródła pozyskiwania wody
-
-  * Hydrant
-
-  * Wóz strażacki
-
-  * Naturalny zbiornik wody
-
-* Węże przyłączeniowe
-
 * Grafiki domów i otoczenia
 
 ## Lista komend
 
     /savemap
-    /select wood
-    /select brick
-    /select asphalt
     /select torch
     /select add-fireman
 
+Typy bloków
+
+    /select [wood/brick/asphalt/water]
+
+Elementy wizualne
+
+    /select erase
+    /select [hydrant/bush/flower]
+
 ## Wersja
-0.1
+0.4

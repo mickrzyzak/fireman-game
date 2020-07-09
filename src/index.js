@@ -8,7 +8,7 @@ import { createStore } from 'redux';
 import './styles/index.css';
 import * as serviceWorker from './serviceWorker';
 
-const version = '0.1';
+const version = '0.4';
 const devMode = true;
 
 const store = createStore(

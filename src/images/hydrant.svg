@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="HYDRANT" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="40px" height="40px" viewBox="0 0 40 40" enable-background="new 0 0 40 40" xml:space="preserve">
+<path fill="#B22526" stroke="#B22526" stroke-miterlimit="10" d="M27.717,20c0,1.602-1.297,2.901-2.9,2.901h-9.634
+	c-1.602,0-2.9-1.299-2.9-2.901l0,0c0-1.602,1.299-2.9,2.9-2.9h9.634C26.42,17.099,27.717,18.398,27.717,20L27.717,20z"/>
+<circle fill="#EC2327" stroke="#B22526" stroke-miterlimit="10" cx="20" cy="13.312" r="5.66"/>
+<rect x="14.339" y="13.311" fill="#EC2327" stroke="#B22526" stroke-miterlimit="10" width="11.319" height="18.009"/>
+<path fill="#B22526" d="M27.717,31.32c0,0.568-0.463,1.029-1.029,1.029H13.311c-0.57,0-1.028-0.463-1.028-1.029l0,0
+	c0-0.57,0.459-1.029,1.028-1.029h13.376C27.256,30.291,27.717,30.75,27.717,31.32L27.717,31.32z"/>
+<path fill="#B22526" d="M27.203,13.311c0,0.569-0.43,1.028-0.961,1.028H13.756c-0.53,0-0.96-0.46-0.96-1.028l0,0
+	c0-0.569,0.43-1.028,0.96-1.028h12.486C26.773,12.283,27.203,12.742,27.203,13.311L27.203,13.311z"/>
+<circle fill="#D3D3D3" stroke="#B22526" stroke-miterlimit="10" cx="20" cy="20" r="2.901"/>
+</svg>

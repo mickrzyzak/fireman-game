@@ -80,7 +80,7 @@
       //
     }
   }
-  &.Idle {
+  &.Idle, &.Extinguish {
     &.Left, &.Right {
       .Wrapper {
         svg {
@@ -219,6 +219,20 @@
               }
             }
           }
+          #FIREHOSE {
+            animation-name: firemanMoveSideFirehose;
+            @keyframes firemanMoveSideFirehose {
+              0% {
+                transform: translate(0px, 0px);
+              }
+              50% {
+                transform: translate(-4px, -1px);
+              }
+              100% {
+                transform: translate(0px, 0px);
+              }
+            }
+          }
         }
       }
     }
@@ -308,6 +322,26 @@
               }
               100% {
                 transform: translateY(0px);
+              }
+            }
+          }
+          #FIREHOSE {
+            animation-name: firemanMoveFirehose;
+            @keyframes firemanMoveFirehose {
+              0% {
+                transform: translateX(0px);
+              }
+              25% {
+                transform: translateX(-1px);
+              }
+              50% {
+                transform: translateX(0px);
+              }
+              75% {
+                transform: translateX(1px);
+              }
+              100% {
+                transform: translateX(0px);
               }
             }
           }

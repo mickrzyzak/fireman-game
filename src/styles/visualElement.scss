@@ -1,0 +1,51 @@
+.VisualElement {
+  z-index: 2;
+  position: absolute;
+  pointer-events: none;
+  &.flower_1, &.flower_2 {
+    transform-origin: 50% 70%;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+  &.flower_1 {
+    animation-name: flowerLeft;
+    @keyframes flowerLeft {
+      0% {
+        transform: rotateZ(0deg);
+      }
+      25% {
+        transform: rotateZ(6deg);
+      }
+      50% {
+        transform: rotateZ(0deg);
+      }
+      75% {
+        transform: rotateZ(-6deg);
+      }
+      100% {
+        transform: rotateZ(0deg);
+      }
+    }
+  }
+  &.flower_2 {
+    animation-name: flowerRight;
+    @keyframes flowerRight {
+      0% {
+        transform: rotateZ(0deg);
+      }
+      25% {
+        transform: rotateZ(-6deg);
+      }
+      50% {
+        transform: rotateZ(0deg);
+      }
+      75% {
+        transform: rotateZ(6deg);
+      }
+      100% {
+        transform: rotateZ(0deg);
+      }
+    }
+  }
+}

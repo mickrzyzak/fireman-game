@@ -1,7 +1,7 @@
 import React from 'react';
 import Fireman from './Fireman';
 import { connect } from 'react-redux';
-import { mapToStore, addFireman, setFiremanTarget, clientSelected } from './../actions';
+import { mapToStore, visualLayerToggle, addFireman, setFiremanTarget, clientSelected } from './../actions';
 
 class Map extends React.Component {
 
@@ -15,10 +15,12 @@ class Map extends React.Component {
   }
 
   componentDidMount() {
-    // Create map data
-    let data;
+    // Create or load map data
+    let data, visual;
     if(this.props.data) {
-      data = JSON.parse(this.props.data);
+      let json = JSON.parse(this.props.data);
+      data = json[0];
+      visual = json[1];
     } else {
       data = new Array(parseInt(this.props.y));
       for(let i = 0; i < data.length; i++) {
@@ -32,7 +34,7 @@ class Map extends React.Component {
       temperature[i].fill(0);
     }
     // Update map in the store
-    this.mapToStore(this.props.x, this.props.y, data, temperature);
+    this.mapToStore(this.props.x, this.props.y, data, visual, temperature);
     // Set fire simulaiton interval
     let mapInterval = setInterval(() => {
       this.fireSimulation();
@@ -42,6 +44,17 @@ class Map extends React.Component {
     });
     // Add resize event
     window.addEventListener('resize', () => { this.forceUpdate(); });
+    // Add keypress event
+    window.addEventListener('keypress', (event) => { this.keyPress(event) });
+  }
+
+  keyPress = (event) => {
+    // Vars
+    let key = event.key;
+    // Toggle visual layer
+    if(key === 'v') {
+      this.props.visualLayerToggle();
+    }
   }
 
   fireSimulation = () => {
@@ -119,14 +132,33 @@ class Map extends React.Component {
     // Vars
     let somethingChange = false;
     let data = this.props.store.data;
+    let visual = this.props.store.visual;
     let temperature = this.props.store.temperature;
-    // Add map element
-    if(['WOOD', 'BRICK', 'ASPHALT'].includes(type)) {
+    // Set block type
+    if(['WOOD', 'BRICK', 'ASPHALT', 'WATER'].includes(type)) {
       if(data[y][x] === type) {
         data[y][x] = null;
       } else {
         data[y][x] = type;
       }
+      somethingChange = true;
+    }
+    // Add visual element
+    if(['HYDRANT', 'BUSH', 'FLOWER'].includes(type)) {
+      if(type === 'FLOWER') {
+        type = type+'_'+(Math.floor(Math.random() * 2) + 1);
+      }
+      visual.push({ x, y, name: type });
+      somethingChange = true;
+    }
+    // Remove visual element
+    if('ERASE' === type) {
+      visual.map((element, index) => {
+        if(element.x === x && element.y === y) {
+          visual.splice(index, 1);
+        }
+        return 0;
+      });
       somethingChange = true;
     }
     // Ignite
@@ -144,11 +176,14 @@ class Map extends React.Component {
     }
     // Set target to fireman
     if('FIREMAN' === type) {
+      let selectedFireman = this.props.firemans[this.props.client.selectedId];
       if('WOOD' === this.props.store.data[y][x]) {
-        let distance = Math.sqrt(Math.pow(this.props.firemans[this.props.client.selectedId].position.x - x, 2) + Math.pow(this.props.firemans[this.props.client.selectedId].position.y - y, 2)) * this.state.blockSize;
-        if(distance < 300) {
+        let distance = Math.sqrt(Math.pow(selectedFireman.position.x - x, 2) + Math.pow(selectedFireman.position.y - y, 2)) * this.state.blockSize;
+        if(distance < 300 && selectedFireman.connection !== false) {
           this.props.setFiremanTarget(this.props.client.selectedId, { x, y }, 'Extinguish');
-        } else {
+        } else if(selectedFireman.connection === false) {
+          this.props.setFiremanTarget(this.props.client.selectedId, { x, y }, 'Notconnected');
+        } else if(distance >= 300) {
           this.props.setFiremanTarget(this.props.client.selectedId, { x, y }, 'Toofar');
         }
         this.props.clientSelected('FIREMAN', this.props.client.selectedId);
@@ -175,7 +210,7 @@ class Map extends React.Component {
         if(map.grid) {
           text = (map.data[iy][ix]) ? map.data[iy][ix] : ix + 'x' + iy;
         }
-        // Map data
+        // Block type
         let type;
         switch(map.data[iy][ix]) {
           case 'BRICK':
@@ -187,37 +222,20 @@ class Map extends React.Component {
           case 'ASPHALT':
             type = 'Asphalt';
             break;
+          case 'WATER':
+            type = 'Water';
+            break;
           default:
             type = 'Empty';
-        }
-        // Fire and smoke
-        let fire;
-        let smoke;
-        let particles = [];
-        for(var i = 1; i <= 4; i++) {
-          particles.push(<div className="Particle" key={ i }></div>);
-        }
-        particles = <div className="Wrapper">{ particles }</div>;
-        if(map.temperature[iy][ix] >= this.state.fireInit) {
-          fire = <div className="Fire Ignite">{ particles }</div>;
-        } else if(map.temperature[iy][ix] >= this.state.smokeInit) {
-          fire = <div className="Fire">{ particles }</div>;
-        }
-        if(map.temperature[iy][ix] >= this.state.smokeInit && map.temperature[iy][ix] < this.state.fireInit) {
-          smoke = <div className="Smoke">{ particles }</div>;
-        } else if(map.temperature[iy][ix] >= this.state.fireInit || map.temperature[iy][ix] === -1) {
-          smoke = <div className="Smoke Burnt">{ particles }</div>;
         }
         // Create block
         columns.push(
           <div
-            className={ 'Column ' + type }
+            className={ 'Block ' + type }
             onClick={ this.cordAction.bind(this, ix, iy, this.props.client.selected) }
             key={ ix }
           >
             { text }
-            { fire }
-            { smoke }
           </div>
         );
       }
@@ -226,13 +244,95 @@ class Map extends React.Component {
     return rows;
   }
 
-  mapToStore = (x = null, y = null, data = null, temperature = null) => {
+  generateFireLayer = () => {
+    // Generate fire layer
+    let map = this.props.store;
+    let fireElements = [];
+    let particles = [];
+    for(var i = 1; i <= 4; i++) {
+      particles.push(<div className="Particle" key={ i }></div>);
+    }
+    particles = <div className="Wrapper">{ particles }</div>;
+    for(let iy = 0; iy < map.cords.y; iy++) {
+      for(let ix = 0; ix < map.cords.x; ix++) {
+        let fireClass, smokeClass;
+        let positionX = ix * this.state.blockSize;
+        let positionY = iy * this.state.blockSize;
+        if(map.temperature[iy][ix] >= this.state.fireInit) {
+          fireClass = 'Fire Ignite';
+        } else if(map.temperature[iy][ix] >= this.state.smokeInit) {
+          fireClass= 'Fire';
+        }
+        if(map.temperature[iy][ix] >= this.state.smokeInit && map.temperature[iy][ix] < this.state.fireInit) {
+          smokeClass = 'Smoke';
+        } else if(map.temperature[iy][ix] >= this.state.fireInit || map.temperature[iy][ix] === -1) {
+          smokeClass = 'Smoke Burnt';
+        }
+        if(fireClass !== undefined) {
+          fireElements.push(
+            <div
+              className={ fireClass }
+              key={ 'Fire-' + ix + 'x' + iy }
+              style={{
+                top: positionY+'px',
+                left: positionX+'px',
+              }}
+            >
+              { particles }
+            </div>
+          );
+        }
+        if(smokeClass !== undefined) {
+          fireElements.push(
+            <div
+              className={ smokeClass }
+              key={ 'Smoke-' + ix + 'x' + iy }
+              style={{
+                top: positionY+'px',
+                left: positionX+'px',
+              }}
+            >
+              { particles }
+            </div>
+          );
+        }
+      }
+    }
+    return fireElements;
+  }
+
+  generateVisualLayer = () => {
+    // Generate fire layer
+    let map = this.props.store;
+    let visualElements = [];
+    map.visual.map((element, index) => {
+      let positionX = element.x * this.state.blockSize;
+      let positionY = element.y * this.state.blockSize;
+      visualElements.push(
+        <img
+          className={ 'VisualElement ' + element.name.toLowerCase() }
+          src={ require('../images/'+element.name.toLowerCase()+'.svg') }
+          alt={ element.name }
+          key={ index }
+          style={{
+            'top':  positionY+'px',
+            'left': positionX+'px',
+          }}
+        />
+      );
+      return 0;
+    });
+    return visualElements;
+  }
+
+  mapToStore = (x = null, y = null, data = null, visual = null, temperature = null) => {
     // Update map in the store
     if(x === null) x = this.props.store.cords.x;
     if(y === null) y = this.props.store.cords.y;
     if(data === null) data = this.props.store.data;
+    if(visual === null) visual = this.props.store.visual;
     if(temperature === null) temperature = this.props.store.temperature;
-    this.props.mapToStore(x, y, data, temperature);
+    this.props.mapToStore(x, y, data, visual, temperature);
   }
 
   render() {
@@ -246,6 +346,8 @@ class Map extends React.Component {
     if(window.innerWidth >= this.props.store.cords.x * this.state.blockSize + 120) {
       return <div id="Map" className="Map">
         { this.generateMapBody() }
+        { (this.props.store.visualLayer) ? this.generateVisualLayer() : null }
+        { this.generateFireLayer() }
         { firemans }
       </div>;
     } else {
@@ -265,7 +367,8 @@ const mapStateToProps = store => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    mapToStore: (x, y, data, temperature) => dispatch(mapToStore(x, y, data, temperature)),
+    mapToStore: (x, y, data, visual, temperature) => dispatch(mapToStore(x, y, data, visual, temperature)),
+    visualLayerToggle: () => dispatch(visualLayerToggle()),
     addFireman: (id, position) => dispatch(addFireman(id, position)),
     setFiremanTarget: (id, target, action) => dispatch(setFiremanTarget(id, target, action)),
     clientSelected: (selected, selectedId) => dispatch(clientSelected(selected, selectedId)),

@@ -1,4 +1,4 @@
-.Column {
+.Block {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -27,6 +27,10 @@
   }
   &.Asphalt {
     background-color: $asphalt;
+    color: white;
+  }
+  &.Water {
+    background-color: $water;
     color: white;
   }
 }

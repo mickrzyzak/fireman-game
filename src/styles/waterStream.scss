@@ -9,9 +9,9 @@
   .Wrapper {
     position: relative;
     height: calc(100% - 15px);
-    margin-top: 15px;
-    border-top-left-radius: 80%;
-    border-top-right-radius: 80%;
+    margin-top: 20px;
+    border-top-left-radius: 100%;
+    border-top-right-radius: 100%;
     border-bottom-left-radius: $water-stream-size;
     border-bottom-right-radius: $water-stream-size;
     overflow: hidden;

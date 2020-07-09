@@ -6,6 +6,7 @@ const firemans = (state = [], action) => {
         { id: action.id,
           position: { x: action.position.x, y: action.position.y },
           target: { x: action.position.x, y: action.position.y },
+          connection: false,
           orientation: 'Bottom',
           action: 'Idle',
         }
@@ -28,6 +29,21 @@ const firemans = (state = [], action) => {
       state[action.id].position.x = action.target.x;
       state[action.id].position.y = action.target.y;
       if(action.orientation) state[action.id].orientation = action.orientation;
+      return state;
+    case 'setConnection':
+      state[action.id].connection = action.connection;
+      return state;
+    case 'addConnectionPoint':
+      if(typeof state[action.id].connection.way !== 'undefined') {
+        if(state[action.id].connection.way.length > 0) {
+          if(state[action.id].connection.way[state[action.id].connection.way.length - 1].x !== action.point.x
+          || state[action.id].connection.way[state[action.id].connection.way.length - 1].y !== action.point.y) {
+            state[action.id].connection.way.push(action.point);
+          }
+        } else {
+          state[action.id].connection.way.push(action.point);
+        }
+      }
       return state;
     default:
       return state;

@@ -1,8 +1,9 @@
-export function mapToStore(x, y, data, temperature) {
+export function mapToStore(x, y, data, visual, temperature) {
   return {
     type: 'mapToStore',
     cords: { x, y },
     data,
+    visual,
     temperature,
   }
 }
@@ -10,6 +11,12 @@ export function mapToStore(x, y, data, temperature) {
 export function gridToggle() {
   return {
     type: 'gridToggle',
+  }
+}
+
+export function visualLayerToggle() {
+  return {
+    type: 'visualLayerToggle',
   }
 }
 
@@ -44,5 +51,21 @@ export function moveFireman(id, target, orientation) {
     id,
     target,
     orientation,
+  }
+}
+
+export function setConnection(id, connection) {
+  return {
+    type: 'setConnection',
+    id,
+    connection,
+  }
+}
+
+export function addConnectionPoint(id, point) {
+  return {
+    type: 'addConnectionPoint',
+    id,
+    point,
   }
 }

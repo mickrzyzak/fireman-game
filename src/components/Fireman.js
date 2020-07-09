@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { clientSelected, moveFireman, setFiremanTarget } from './../actions';
-import { firemanLeftSprite, firemanBottomSprite, firemanTopSprite } from './../sprites';
+import { clientSelected, moveFireman, setFiremanTarget, setConnection, addConnectionPoint } from './../actions';
+import { firemanLeftSprite, firemanBottomSprite, firemanTopSprite, firemanLeftConnectedSprite, firemanTopConnectedSprite, firemanBottomConnectedSprite } from './../sprites';
 
 class Fireman extends React.Component {
 
@@ -38,6 +38,12 @@ class Fireman extends React.Component {
   }
 
   followTheWay = () => {
+    // Vars
+    let map = this.props.store;
+    let mapGrid = this.state.mapGrid;
+    let orientation;
+    let moveTo;
+    let lowestDistance = 999999;
     // End of way
     if((this.state.firemanMoveInterval
       && this.state.fireman.position.x === this.state.fireman.target.x
@@ -49,16 +55,41 @@ class Fireman extends React.Component {
       });
       if(this.state.fireman.action === 'Move') {
         this.props.setFiremanTarget(this.state.fireman.id, this.state.fireman.position, 'Idle');
+        // Connection
+        let stepBack = false;
+        if(this.props.store.data[this.state.fireman.position.y][this.state.fireman.position.x] === 'WATER') {
+          if(this.state.fireman.connection === false) {
+            this.props.setConnection(this.state.fireman.id, { x: this.state.fireman.position.x, y: this.state.fireman.position.y , way: [] });
+            stepBack = true;
+          } else if(this.state.fireman.position.x === this.state.fireman.connection.x && this.state.fireman.position.y === this.state.fireman.connection.y) {
+            this.props.setConnection(this.state.fireman.id, false);
+            stepBack = true;
+          }
+          if(stepBack) {            
+            switch(this.state.fireman.orientation) {
+              case 'Top':
+                stepBack = { x: this.state.fireman.position.x, y: this.state.fireman.position.y + 1 };
+                break;
+              case 'Bottom':
+                stepBack = { x: this.state.fireman.position.x, y: this.state.fireman.position.y - 1 };
+                break;
+              case 'Left':
+                stepBack = { x: this.state.fireman.position.x + 1, y: this.state.fireman.position.y };
+                break;
+              case 'Right':
+                stepBack = { x: this.state.fireman.position.x - 1, y: this.state.fireman.position.y };
+                break;
+              default:
+                stepBack = { x: this.state.fireman.position.x, y: this.state.fireman.position.y };
+            }
+            this.props.setFiremanTarget(this.state.fireman.id, stepBack, 'Move');
+          }
+        }
+        this.props.addConnectionPoint(this.state.fireman.id, { x: this.state.fireman.position.x, y: this.state.fireman.position.y });
         this.forceUpdate();
       }
       return 0;
     }
-    // Vars
-    let map = this.props.store;
-    let mapGrid = this.state.mapGrid;
-    let orientation;
-    let moveTo;
-    let lowestDistance = 999999;
     // Search next step
     if(this.state.iteration > 0) {
       for(let iy = 0; iy < map.cords.y; iy++) {
@@ -69,6 +100,9 @@ class Fireman extends React.Component {
               if(distance < lowestDistance) {
                 lowestDistance = distance;
                 moveTo = { x: ix, y: iy };
+                if(this.state.fireman.connection !== false) {
+                  this.props.addConnectionPoint(this.state.fireman.id, { x: this.state.fireman.position.x, y: this.state.fireman.position.y });
+                }
               }
           }
         }
@@ -150,9 +184,15 @@ class Fireman extends React.Component {
     if(this.state.fireman.action) className += ' ' + this.state.fireman.action;
     // Set fireman sprite
     let firemanSprite;
-    if(this.state.fireman.orientation === 'Left' || this.state.fireman.orientation === 'Right') firemanSprite = firemanLeftSprite;
-    if(this.state.fireman.orientation === 'Top') firemanSprite = firemanTopSprite;
-    if(this.state.fireman.orientation === 'Bottom') firemanSprite = firemanBottomSprite;
+    if(this.state.fireman.connection !== false) {
+      if(this.state.fireman.orientation === 'Left' || this.state.fireman.orientation === 'Right') firemanSprite = firemanLeftConnectedSprite;
+      if(this.state.fireman.orientation === 'Top') firemanSprite = firemanTopConnectedSprite;
+      if(this.state.fireman.orientation === 'Bottom') firemanSprite = firemanBottomConnectedSprite;
+    } else {
+      if(this.state.fireman.orientation === 'Left' || this.state.fireman.orientation === 'Right') firemanSprite = firemanLeftSprite;
+      if(this.state.fireman.orientation === 'Top') firemanSprite = firemanTopSprite;
+      if(this.state.fireman.orientation === 'Bottom') firemanSprite = firemanBottomSprite;
+    }
     // Water stream
     let positionX = this.state.fireman.position.x * this.state.blockSize;
     let positionY = this.state.fireman.position.y * this.state.blockSize;
@@ -173,8 +213,45 @@ class Fireman extends React.Component {
         <div className="Particles"></div>
       </div>
     </div>;
+    // Connectors
+    let connectors = [];
+    if(typeof this.state.fireman.connection.way !== 'undefined') {
+      this.state.fireman.connection.way.map((obj, index) => {
+        let positionX = obj.x * this.state.blockSize;
+        let positionY = obj.y * this.state.blockSize;
+        let options = '';
+        if(index !== 0) {
+          if(this.state.fireman.connection.way[index - 1].y < obj.y) options += ' Top';
+          if(this.state.fireman.connection.way[index - 1].y > obj.y) options += ' Bottom';
+          if(this.state.fireman.connection.way[index - 1].x < obj.x) options += ' Left';
+          if(this.state.fireman.connection.way[index - 1].x > obj.x) options += ' Right';
+        } else {
+          options += ' Start';
+        }
+        if(typeof this.state.fireman.connection.way[index + 1] !== 'undefined') {
+          if(this.state.fireman.connection.way[index + 1].y < obj.y) options += '-Top';
+          if(this.state.fireman.connection.way[index + 1].y > obj.y) options += '-Bottom';
+          if(this.state.fireman.connection.way[index + 1].x < obj.x) options += '-Left';
+          if(this.state.fireman.connection.way[index + 1].x > obj.x) options += '-Right';
+        } else {
+          options += '-End';
+        }
+        connectors.push(<div
+          key={ index }
+          className={ 'Connector' + options }
+          style={{
+            top: positionY+'px',
+            left: positionX+'px',
+          }}
+        >
+          <div className="Wrapper"></div>
+        </div>);
+        return 0;
+      });
+    }
     // Render fireman
     return <>
+      { connectors }
       { waterStream }
       <div
         className={ className }
@@ -194,7 +271,7 @@ class Fireman extends React.Component {
 
 }
 
-const mapStateToProps = store => {
+const firemanStateToProps = store => {
   return {
     store: store.map,
     client: store.client,
@@ -202,12 +279,14 @@ const mapStateToProps = store => {
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const firemanDispatchToProps = dispatch => {
   return {
     clientSelected: (selected, selectedId) => dispatch(clientSelected(selected, selectedId)),
     moveFireman: (id, target, orientation) => dispatch(moveFireman(id, target, orientation)),
     setFiremanTarget: (id, target, action) => dispatch(setFiremanTarget(id, target, action)),
+    setConnection: (id, connection) => dispatch(setConnection(id, connection)),
+    addConnectionPoint: (id, point) => dispatch(addConnectionPoint(id, point)),
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Fireman);
+export default connect(firemanStateToProps, firemanDispatchToProps)(Fireman);
