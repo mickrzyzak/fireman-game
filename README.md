@@ -26,6 +26,8 @@ Rozgrywka będzie składała się z zestawu fabularyzowanych misji, których cel
 
 * Gaszenie pożarów
 
+* Dialogi w chmurkach
+
 ## Elementy wizualne
 
 * Strażak z animacjami
@@ -41,8 +43,6 @@ Rozgrywka będzie składała się z zestawu fabularyzowanych misji, których cel
 * Interfejs użytkownika
 
 * Misje fabularne
-
-* Dialogi w chmurkach
 
 * Grafiki domów i otoczenia
 
@@ -62,4 +62,4 @@ Elementy wizualne
     /select [hydrant/bush/flower]
 
 ## Wersja
-0.4
+0.5

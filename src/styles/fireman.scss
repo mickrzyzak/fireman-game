@@ -20,34 +20,35 @@
         animation-duration: 1s;
       }
     }
-    &:after {
+    &:before {
       content: "";
       display: block;
       position: absolute;
-      left: 10px;
-      top: -15px;
-      width: 0px;
-      height: 0px;
+      left: 20%;
+      bottom: 1px;
+      width: 60%;
+      height: 10px;
       pointer-events: none;
-      border-top: 15px solid transparent;
-      border-bottom: 15px solid transparent;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
       transition: .5s;
-      animation-name: selectArrow;
+      z-index: -1;
+      background-color: transparent;
+      border-radius: 50%;
+      animation-name: selectAnimation;
       animation-duration: .5s;
       animation-iteration-count: infinite;
-      animation-timing-function: ease;
-      z-index: 999;
-      @keyframes selectArrow {
+      animation-timing-function: linear;
+      @keyframes selectAnimation {
         0% {
-          top: -15px;
+          width: 60%;
+          left: 20%;
         }
         50% {
-          top: -20px;
+          width: 70%;
+          left: 15%;
         }
         100% {
-          top: -15px;
+          width: 60%;
+          left: 20%;
         }
       }
     }
@@ -55,8 +56,8 @@
   &.Selected {
     z-index: 3;
     .Wrapper {
-      &:after {
-        border-top-color: red !important;
+      &:before {
+        background-color: $selected !important;
       }
     }
   }
@@ -353,8 +354,8 @@
     cursor: pointer;
     z-index: 3;
     .Wrapper {
-      &:after {
-        border-top-color: white;
+      &:before {
+        background-color: $selected;
       }
     }
   }

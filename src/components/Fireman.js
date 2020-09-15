@@ -65,7 +65,7 @@ class Fireman extends React.Component {
             this.props.setConnection(this.state.fireman.id, false);
             stepBack = true;
           }
-          if(stepBack) {            
+          if(stepBack) {
             switch(this.state.fireman.orientation) {
               case 'Top':
                 stepBack = { x: this.state.fireman.position.x, y: this.state.fireman.position.y + 1 };
@@ -249,6 +249,8 @@ class Fireman extends React.Component {
         return 0;
       });
     }
+    // Dialogue
+    let dialogue = (this.state.fireman.dialogue.text) ? <div key={ this.state.fireman.dialogue.timestamp } className='Dialogue'>{ this.state.fireman.dialogue.text }</div> : null;
     // Render fireman
     return <>
       { connectors }
@@ -265,6 +267,7 @@ class Fireman extends React.Component {
         <div className="Wrapper">
           { firemanSprite }
         </div>
+        { dialogue }
       </div>
     </>;
   }

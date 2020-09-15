@@ -1,0 +1,33 @@
+.Dialogue {
+  position: absolute;
+  bottom: $block-size + 5px;
+  left: (-$dialogue-width / 2) + ($block-size / 2);
+  width: 100px;
+  z-index: 2;
+  background-color: rgba(white, .9);
+  border-radius: 12px;
+  padding: 6px;
+  font-size: .75rem;
+  text-align: center;
+  line-height: 1;
+  opacity: 0;
+  box-sizing: border-box;
+  animation-name: dialogue;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  pointer-events: none;
+  @keyframes dialogue {
+    0% {
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+}

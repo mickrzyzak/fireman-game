@@ -69,3 +69,12 @@ export function addConnectionPoint(id, point) {
     point,
   }
 }
+
+export function setDialogue(id, text) {
+  return {
+    type: 'setDialogue',
+    id,
+    text,
+    timestamp: Date.now(),
+  }
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import Fireman from './Fireman';
 import { connect } from 'react-redux';
-import { mapToStore, visualLayerToggle, addFireman, setFiremanTarget, clientSelected } from './../actions';
+import { mapToStore, visualLayerToggle, addFireman, setFiremanTarget, clientSelected, setDialogue } from './../actions';
 
 class Map extends React.Component {
 
@@ -33,6 +33,13 @@ class Map extends React.Component {
       temperature[i] = new Array(parseInt(this.props.x));
       temperature[i].fill(0);
     }
+    // Start the initial fire
+    let firestarter = JSON.parse(this.props.firestarter);
+    firestarter.map(block => {
+      temperature[block.y][block.x] = this.state.fireInit;
+      return 0;
+    });
+
     // Update map in the store
     this.mapToStore(this.props.x, this.props.y, data, visual, temperature);
     // Set fire simulaiton interval
@@ -182,9 +189,11 @@ class Map extends React.Component {
         if(distance < 300 && selectedFireman.connection !== false) {
           this.props.setFiremanTarget(this.props.client.selectedId, { x, y }, 'Extinguish');
         } else if(selectedFireman.connection === false) {
-          this.props.setFiremanTarget(this.props.client.selectedId, { x, y }, 'Notconnected');
+          this.props.setFiremanTarget(this.props.client.selectedId, { x, y }, 'Idle');
+          this.props.setDialogue(this.props.client.selectedId, 'Najpierw muszę podłączyć wąż.');
         } else if(distance >= 300) {
-          this.props.setFiremanTarget(this.props.client.selectedId, { x, y }, 'Toofar');
+          this.props.setFiremanTarget(this.props.client.selectedId, { x, y }, 'Idle');
+          this.props.setDialogue(this.props.client.selectedId, 'Zbyt daleko.');
         }
         this.props.clientSelected('FIREMAN', this.props.client.selectedId);
       } else if(!['WOOD', 'BRICK'].includes(this.props.store.data[y][x])) {
@@ -372,6 +381,7 @@ const mapDispatchToProps = dispatch => {
     addFireman: (id, position) => dispatch(addFireman(id, position)),
     setFiremanTarget: (id, target, action) => dispatch(setFiremanTarget(id, target, action)),
     clientSelected: (selected, selectedId) => dispatch(clientSelected(selected, selectedId)),
+    setDialogue: (id, text) => dispatch(setDialogue(id, text)),
   }
 }
 

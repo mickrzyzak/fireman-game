@@ -3,12 +3,14 @@ const firemans = (state = [], action) => {
     case 'addFireman':
       return [
         ...state,
-        { id: action.id,
+        {
+          id: action.id,
           position: { x: action.position.x, y: action.position.y },
           target: { x: action.position.x, y: action.position.y },
           connection: false,
           orientation: 'Bottom',
           action: 'Idle',
+          dialogue: { text: 'Gotów do służby!', timestamp: null },
         }
       ];
     case 'setFiremanTarget':
@@ -44,6 +46,9 @@ const firemans = (state = [], action) => {
           state[action.id].connection.way.push(action.point);
         }
       }
+      return state;
+    case 'setDialogue':
+      state[action.id].dialogue = { text: action.text, timestamp: Date.now() };
       return state;
     default:
       return state;
