@@ -5,10 +5,10 @@ import Console from './components/Console';
 import allReducers from './reducers';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import './styles/index.css';
+import './styles/app.scss';
 import * as serviceWorker from './serviceWorker';
 
-const version = '0.5';
+const version = '0.51';
 const devMode = true;
 
 const store = createStore(

@@ -46,6 +46,11 @@ Rozgrywka będzie składała się z zestawu fabularyzowanych misji, których cel
 
 * Grafiki domów i otoczenia
 
+## Skróty klawiszowe
+
+    v - przełączanie wyświetlania warstwy wizualnej  
+    d - przełączanie wyświetlania typów bloków
+
 ## Lista komend
 
     /savemap
@@ -59,7 +64,7 @@ Typy bloków
 Elementy wizualne
 
     /select erase
-    /select [hydrant/bush/flower]
+    /select [hydrant/bush/flower/tree]
 
 ## Wersja
-0.5
+0.51

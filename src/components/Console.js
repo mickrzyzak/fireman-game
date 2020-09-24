@@ -44,6 +44,9 @@ class Console extends React.Component {
       case '/select flower':
         this.props.clientSelected('FLOWER');
         break;
+      case '/select tree':
+        this.props.clientSelected('TREE');
+        break;
       case '/select erase':
         this.props.clientSelected('ERASE');
         break;

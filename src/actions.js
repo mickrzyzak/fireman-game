@@ -20,6 +20,12 @@ export function visualLayerToggle() {
   }
 }
 
+export function dataLayerToggle() {
+  return {
+    type: 'dataLayerToggle',
+  }
+}
+
 export function clientSelected(selected, selectedId = null) {
   return {
     type: 'clientSelected',

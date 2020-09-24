@@ -1,7 +1,7 @@
 import React from 'react';
 import Fireman from './Fireman';
 import { connect } from 'react-redux';
-import { mapToStore, visualLayerToggle, addFireman, setFiremanTarget, clientSelected, setDialogue } from './../actions';
+import { mapToStore, visualLayerToggle, dataLayerToggle, addFireman, setFiremanTarget, clientSelected, setDialogue } from './../actions';
 
 class Map extends React.Component {
 
@@ -39,7 +39,12 @@ class Map extends React.Component {
       temperature[block.y][block.x] = this.state.fireInit;
       return 0;
     });
-
+    // Spawn firemans
+    let firemans = JSON.parse(this.props.firefighters);
+    firemans.map((block, i) => {
+      this.props.addFireman(i, { x: block.x, y: block.y });
+      return 0;
+    });
     // Update map in the store
     this.mapToStore(this.props.x, this.props.y, data, visual, temperature);
     // Set fire simulaiton interval
@@ -61,6 +66,10 @@ class Map extends React.Component {
     // Toggle visual layer
     if(key === 'v') {
       this.props.visualLayerToggle();
+    }
+    // Toggle data layer
+    if(key === 'd') {
+      this.props.dataLayerToggle();
     }
   }
 
@@ -151,8 +160,11 @@ class Map extends React.Component {
       somethingChange = true;
     }
     // Add visual element
-    if(['HYDRANT', 'BUSH', 'FLOWER'].includes(type)) {
+    if(['HYDRANT', 'BUSH', 'FLOWER', 'TREE'].includes(type)) {
       if(type === 'FLOWER') {
+        type = type+'_'+(Math.floor(Math.random() * 2) + 1);
+      }
+      if(type === 'TREE') {
         type = type+'_'+(Math.floor(Math.random() * 2) + 1);
       }
       visual.push({ x, y, name: type });
@@ -199,6 +211,8 @@ class Map extends React.Component {
       } else if(!['WOOD', 'BRICK'].includes(this.props.store.data[y][x])) {
         this.props.setFiremanTarget(this.props.client.selectedId, { x, y }, 'Move');
         this.props.clientSelected(null);
+      } else if('BRICK' === this.props.store.data[y][x]) {
+        this.props.setDialogue(this.props.client.selectedId, 'Nie mogę tam pójść.');
       }
     }
     // Update map in the store
@@ -221,21 +235,25 @@ class Map extends React.Component {
         }
         // Block type
         let type;
-        switch(map.data[iy][ix]) {
-          case 'BRICK':
-            type = 'Brick';
-            break;
-          case 'WOOD':
-            type = 'Wood';
-            break;
-          case 'ASPHALT':
-            type = 'Asphalt';
-            break;
-          case 'WATER':
-            type = 'Water';
-            break;
-          default:
-            type = 'Empty';
+        if(this.props.store.dataLayer) {
+          switch(map.data[iy][ix]) {
+            case 'BRICK':
+              type = 'Brick';
+              break;
+            case 'WOOD':
+              type = 'Wood';
+              break;
+            case 'ASPHALT':
+              type = 'Asphalt';
+              break;
+            case 'WATER':
+              type = 'Water';
+              break;
+            default:
+              type = 'Empty';
+          }
+        } else {
+          type = 'Empty';
         }
         // Create block
         columns.push(
@@ -352,15 +370,16 @@ class Map extends React.Component {
       return 0;
     });
     // Render map
-    if(window.innerWidth >= this.props.store.cords.x * this.state.blockSize + 120) {
+    if(window.innerWidth >= this.props.store.cords.x * this.state.blockSize + 100) {
       return <div id="Map" className="Map">
         { this.generateMapBody() }
         { (this.props.store.visualLayer) ? this.generateVisualLayer() : null }
         { this.generateFireLayer() }
         { firemans }
+        <div className="MapBorder"></div>
       </div>;
     } else {
-      return <span>Rozdzielczość okna przegląarki jest zbyt mała.</span>;
+      return <span className="ResolutionAlert">Rozdzielczość okna przeglądarki jest zbyt mała.</span>;
     }
   }
 
@@ -378,6 +397,7 @@ const mapDispatchToProps = dispatch => {
   return {
     mapToStore: (x, y, data, visual, temperature) => dispatch(mapToStore(x, y, data, visual, temperature)),
     visualLayerToggle: () => dispatch(visualLayerToggle()),
+    dataLayerToggle: () => dispatch(dataLayerToggle()),
     addFireman: (id, position) => dispatch(addFireman(id, position)),
     setFiremanTarget: (id, target, action) => dispatch(setFiremanTarget(id, target, action)),
     clientSelected: (selected, selectedId) => dispatch(clientSelected(selected, selectedId)),

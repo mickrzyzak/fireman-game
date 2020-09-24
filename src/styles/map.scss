@@ -1,9 +1,38 @@
 .Map {
-  border: 10px solid $grey;
   position: relative;
+  background-color: white;
   margin: 50px;
   .Row {
     display: flex;
     flex-direction: row;
+  }
+}
+
+.MapBorder {
+  position: absolute;
+  top: 0px;
+  left: -$map-border-width;
+  width: 100%;
+  height: 100%;
+  border-left: $map-border-width solid $map-border;
+  border-right: $map-border-width solid $map-border;
+  pointer-events: none;
+  &:before, &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: -$map-border-width;
+    width: 100%;
+    height: $block-size / 2;
+    border: $map-border-width solid $map-border;
+    background-image: url('../images/fence.svg');
+    background-position: center;
+  }
+  &:before {
+    top: -($block-size / 2) - (2 * $map-border-width);
+  }
+  &:after {
+    bottom: 0px;
+    z-index: 4;
   }
 }
