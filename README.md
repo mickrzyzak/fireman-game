@@ -42,9 +42,11 @@ Rozgrywka będzie składała się z zestawu fabularyzowanych misji, których cel
 
 * Interfejs użytkownika
 
-* Misje fabularne
+* Misje pseudo-fabularne
 
 * Grafiki domów i otoczenia
+
+* Efekty dźwiękowe
 
 ## Skróty klawiszowe
 

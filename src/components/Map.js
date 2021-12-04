@@ -208,11 +208,12 @@ class Map extends React.Component {
           this.props.setDialogue(this.props.client.selectedId, 'Zbyt daleko.');
         }
         this.props.clientSelected('FIREMAN', this.props.client.selectedId);
+      } else if('BRICK' === this.props.store.data[y][x]) {
+        this.props.setDialogue(this.props.client.selectedId, 'Nie mogę tam pójść.');
+        this.props.clientSelected('FIREMAN', this.props.client.selectedId);
       } else if(!['WOOD', 'BRICK'].includes(this.props.store.data[y][x])) {
         this.props.setFiremanTarget(this.props.client.selectedId, { x, y }, 'Move');
         this.props.clientSelected(null);
-      } else if('BRICK' === this.props.store.data[y][x]) {
-        this.props.setDialogue(this.props.client.selectedId, 'Nie mogę tam pójść.');
       }
     }
     // Update map in the store
