@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/fireman-game/static/css/main.bbfa9071.css",
+    "main.js": "/fireman-game/static/js/main.1297e9a6.js",
+    "static/media/flower_1.svg": "/fireman-game/static/media/flower_1.2894c3fcd85f6f096a14.svg",
+    "static/media/flower_2.svg": "/fireman-game/static/media/flower_2.ac491039f35d84256d72.svg",
+    "static/media/hydrant.svg": "/fireman-game/static/media/hydrant.1b3945b1060d27e31cc0.svg",
+    "static/media/tree_2.svg": "/fireman-game/static/media/tree_2.d24c94a3dea1bacb1430.svg",
+    "static/media/bush.svg": "/fireman-game/static/media/bush.40914aeb1140803e8882.svg",
+    "static/media/tree_1.svg": "/fireman-game/static/media/tree_1.65dd327a15da18b866f2.svg",
+    "index.html": "/fireman-game/index.html",
+    "static/media/waterStream.svg": "/fireman-game/static/media/waterStream.bfc2dfa75daaa18a1fc4.svg",
+    "static/media/fence.svg": "/fireman-game/static/media/fence.b6f707c7def701c03069.svg",
+    "main.bbfa9071.css.map": "/fireman-game/static/css/main.bbfa9071.css.map",
+    "main.1297e9a6.js.map": "/fireman-game/static/js/main.1297e9a6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.bbfa9071.css",
+    "static/js/main.1297e9a6.js"
+  ]
+}
