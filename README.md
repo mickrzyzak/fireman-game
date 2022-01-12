@@ -2,6 +2,8 @@
 
 Gra 2D tworzona w języku JavaScript, oparta o biblioteki React.js i Redux.
 
+Demo online jest dostępne [tutaj](https://mickrzyzak.github.io/fireman-game/).
+
 ## Rozgrywka
 
 Rozgrywka będzie składała się z zestawu fabularyzowanych misji, których celem będzie realizowanie wyznaczonych zadań. Gracz będzie mógł kontrolować zastępy straży pożarnej w celu opanowania rozprzestrzeniającego się ognia.
